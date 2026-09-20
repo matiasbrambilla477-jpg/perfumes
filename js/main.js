@@ -14,7 +14,27 @@
   const toast = document.getElementById("toast");
 
   const WA = "5493757655746";
-  const fmt = (n) => "US$ " + n.toFixed(2);
+  // COTIZACIÓN AUTOMÁTICA DEL DÓLAR BLUE (ARS) — se obtiene de DolarAPI (venta).
+  // Si la API no responde, se usa este respaldo fijo (actualizalo manualmente):
+  const USD_TO_ARS_FALLBACK = 1240; // 1 US$ = X$ ARS (solo si la API falla)
+  let USD_TO_ARS = USD_TO_ARS_FALLBACK;
+  const fmt = (n) => "$ " + Math.round(n * USD_TO_ARS).toLocaleString("es-AR");
+
+  // DolarAPI — dólar blue, cotización de VENTA (referencia de reposición de mercadería)
+  async function fetchBlueRate() {
+    try {
+      const res = await fetch("https://dolarapi.com/v1/dolares/blue");
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      const venta = Number(data.venta);
+      if (!isNaN(venta) && venta > 0) USD_TO_ARS = venta;
+    } catch (err) {
+      USD_TO_ARS = USD_TO_ARS_FALLBACK; // respaldo: se cae la API → usamos el número fijo
+      console.warn("DolarAPI no disponible, usando respaldo:", USD_TO_ARS_FALLBACK);
+    }
+    renderGrid();
+    renderCart();
+  }
   const GENDER_LABEL = { F: "Femenino", M: "Masculino", U: "Unisex" };
   let activeFilter = "todos";
   let searchTerm = "";
@@ -305,4 +325,5 @@
 
   renderGrid();
   renderCart();
+  fetchBlueRate();
 })();
