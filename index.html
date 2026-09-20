@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elegance | Perfumes Originales</title>
+  <meta name="description" content="Elegance - Venta de perfumes originales: masculinos, femeninos y unisex.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="announcement-bar">
+    <span>&#9993; Perfumes 100% originales &middot; Consultas y envíos por WhatsApp</span>
+  </div>
+
+  <header class="header">
+    <div class="container header-inner">
+      <a href="#inicio" class="logo">ELEGANCE</a>
+      <nav class="nav" id="nav">
+        <a href="#inicio">Inicio</a>
+        <a href="#catalogo">Catálogo</a>
+        <a href="#info">Nosotros</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <div class="header-actions">
+        <button class="cart-btn" id="cart-btn" aria-label="Carrito">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6l1-3h4"/><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/></svg>
+          <span class="cart-count" id="cart-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" id="inicio">
+    <div class="container hero-inner">
+      <p class="hero-overline">Perfumería de autor · Envíos a todo el país</p>
+      <h1 class="hero-title">Elige la <em>elegancia</em> que te define</h1>
+      <p class="hero-sub">Perfumes originales masculinos, femeninos y unisex. Seleccionados para quienes buscan distinción en cada detalle.</p>
+      <div class="hero-cta">
+        <a href="#catalogo" class="btn btn-gold">Ver catálogo</a>
+      </div>
+      <div class="hero-badges">
+        <span>&#10003; 100% Originales</span>
+        <span>&#10003; Fragancias de lujo</span>
+        <span>&#10003; Nueva colección</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="benefits" id="beneficios">
+    <div class="container benefits-inner">
+      <div class="benefit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <div><strong>Envíos a todo el país</strong><span>Coordinamos el envío por WhatsApp</span></div>
+      </div>
+      <div class="benefit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
+        <div><strong>Perfumes 100% originales</strong><span>Selección de fragancias de lujo</span></div>
+      </div>
+      <div class="benefit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+        <div><strong>Pedido fácil</strong><span>Abonás al coordinar con nosotros</span></div>
+      </div>
+      <div class="benefit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.35 8.5 8.5 0 0 1-3.5-.72L3 21l1.85-5.5a8.5 8.5 0 1 1 16.15-4z"/></svg>
+        <div><strong>Atención por WhatsApp</strong><span>Respondemos tus consultas</span></div>
+      </div>
+    </div>
+  </section>
+
+  <main class="container">
+    <section id="catalogo">
+      <div class="section-head">
+        <h2>Nuestro Catálogo</h2>
+        <p>Fragancias seleccionadas del catálogo de referencia.</p>
+      </div>
+
+      <div class="toolbar">
+        <div class="filters" id="filters">
+          <button class="filter-btn active" data-filter="todos">Todos</button>
+          <button class="filter-btn" data-filter="F">Femeninos</button>
+          <button class="filter-btn" data-filter="M">Masculinos</button>
+          <button class="filter-btn" data-filter="U">Unisex</button>
+        </div>
+        <div class="toolbar-controls">
+          <div class="search-box">
+            <input type="text" id="search" placeholder="Buscar por marca o nombre..." aria-label="Buscar">
+          </div>
+          <select id="sort" aria-label="Ordenar">
+            <option value="default">Ordenar por</option>
+            <option value="price-asc">Precio: menor a mayor</option>
+            <option value="price-desc">Precio: mayor a menor</option>
+            <option value="name">Nombre: A-Z</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid" id="grid"></div>
+    </section>
+  </main>
+
+  <section class="promo-banner" id="info">
+    <div class="container promo-inner">
+      <h2>Perfumes originales, siempre</h2>
+      <p>Trabajamos con perfumes 100% originales. Si querés conocer las notas de una fragancia o ver la presentación, escribinos.</p>
+      <a href="#contacto" class="btn btn-light">Consultar disponibilidad</a>
+    </div>
+  </section>
+
+  <footer class="footer" id="contacto">
+    <div class="container footer-inner">
+      <div class="footer-col">
+        <h3>ELEGANCE</h3>
+        <p>Perfumes originales, seleccionados con calidad y estilo.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Catálogo</h4>
+        <a href="#catalogo">Todos</a>
+        <a href="#catalogo">Femeninos</a>
+        <a href="#catalogo">Masculinos</a>
+        <a href="#catalogo">Unisex</a>
+      </div>
+      <div class="footer-col">
+        <h4>Atención</h4>
+        <a href="#inicio">Preguntas frecuentes</a>
+        <a href="#inicio">Envíos</a>
+        <a href="#contacto">Contacto</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <p>info@elegance.shop</p>
+        <p>+595 000 000 000</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Elegance. Todos los derechos reservados. Catálogo de referencia: eleganciacompany.com</p>
+    </div>
+  </footer>
+
+  <div class="cart-overlay" id="cart-overlay"></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-label="Carrito de compras">
+    <div class="cart-head">
+      <h3>Tu carrito</h3>
+      <button class="cart-close" id="cart-close" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-foot">
+      <div class="cart-total">
+        <span>Total</span>
+        <strong id="cart-total">US$ 0.00</strong>
+      </div>
+      <button class="btn btn-gold btn-block" id="checkout-btn">Solicitar pedido</button>
+      <p class="cart-note">Se te contactará por WhatsApp para coordinar el pago y el envío.</p>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast">Producto agregado al carrito</div>
+
+  <a class="wa-float" id="wa-float" href="https://wa.me/5493757655746?text=Hola%20Elegance%2C%20quiero%20consultar%20por%20un%20perfume" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <svg viewBox="0 0 32 32" fill="#fff" width="30" height="30"><path d="M16.004 3C9.383 3 4 8.383 4 15.004c0 2.646.865 5.105 2.33 7.093L4.5 28.5l6.604-1.727a11.95 11.95 0 0 0 4.9 1.045h.004C22.623 27.818 28 22.436 28 15.814 28 9.194 22.625 3 16.004 3Zm0 22.572h-.003a9.93 9.93 0 0 1-5.055-1.386l-.363-.215-3.962 1.036 1.058-3.857-.237-.376a9.92 9.92 0 0 1-1.52-5.302c0-5.5 4.478-9.98 9.98-9.98 5.5 0 9.974 4.481 9.974 9.981s-4.477 9.978-9.974 9.978Zm5.496-7.492c-.302-.151-1.786-.881-2.063-.982-.277-.101-.478-.151-.679.151-.201.302-.779.982-.955 1.184-.176.202-.352.227-.654.076-.302-.151-1.274-.47-2.425-1.496-.897-.8-1.503-1.789-1.679-2.09-.176-.302-.019-.465.132-.615.136-.136.302-.352.453-.528.151-.176.201-.302.302-.503.101-.202.05-.378-.025-.529-.075-.151-.679-1.636-.93-2.24-.245-.587-.494-.507-.679-.516l-.577-.01c-.201 0-.528.076-.805.378-.277.302-1.056 1.032-1.056 2.516 0 1.484 1.081 2.918 1.231 3.12.15.202 2.126 3.246 5.15 4.553.72.31 1.281.496 1.719.635.723.232 1.381.2 1.901.121.58-.089 1.786-.73 2.037-1.436.252-.706.252-1.31.176-1.436-.075-.126-.277-.201-.578-.352Z"/></svg>
+  </a>
+
+  <script src="js/products.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
