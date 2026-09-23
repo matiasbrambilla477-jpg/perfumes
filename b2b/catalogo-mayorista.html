@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELEGANCE — Lista Mayorista B2B</title>
+<style>
+  :root{
+    --ink:#1c1a17; --line:#ddd6c8; --gold:#a98a3d; --dark:#171410;
+    --arabe:#1e7a46; --mid:#caa12a; --nicho:#6d4aa5; --lujo:#8a2b2b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Segoe UI',system-ui,Arial,sans-serif;color:#1c1a17;background:#f5f1e8}
+  .page{max-width:1200px;margin:0 auto;padding:14px}
+  .brand{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #a98a3d;padding-bottom:8px}
+  .brand h1{margin:0;font-size:26px;letter-spacing:3px}
+  .brand small{color:#6b6754}
+  .tc-line{margin-top:6px;font-size:13px;color:#6b6754}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0}
+  .toolbar button,.toolbar select,.toolbar input{border:1px solid #c9bfa8;background:#fff;border-radius:6px;padding:8px 12px;font-size:13px;cursor:pointer}
+  .btn-gold{background:#a98a3d;border-color:#a98a3d;color:#fff;font-weight:600}
+  .cards{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+  .seg-card{flex:1;min-width:180px;border-radius:8px;padding:10px 12px;color:#fff}
+  .seg-card b{display:block;font-size:14px}
+  .seg-card span{font-size:12px;opacity:.95}
+  table{width:100%;border-collapse:collapse;background:#fff;font-size:12.5px}
+  th,td{border:1px solid #e3dccd;padding:5px 6px;text-align:left;white-space:nowrap}
+  thead th{background:#171410;color:#f5f1e8;position:sticky;top:0;z-index:2;font-size:11.5px;text-transform:uppercase;letter-spacing:.4px}
+  tbody tr:nth-child(even){background:#faf7f0}
+  td.num,th.num{text-align:right}
+  .seg{display:inline-block;border-radius:10px;padding:1px 8px;color:#fff;font-size:10.5px;font-weight:600}
+  .seg.arabe{background:var(--arabe)} .seg.mid{background:var(--mid)} .seg.nicho{background:var(--nicho)} .seg.lujo{background:var(--lujo)}
+  .owner-hide{background:#fff4e2 !important;color:#7a5b00}
+  .notes{margin-top:12px;font-size:12px;color:#6b6754;line-height:1.5}
+  .foot{display:flex;justify-content:space-between;gap:10px;margin-top:16px;border-top:1px dashed #c9bfa8;padding-top:8px;font-size:12px}
+  .wa{display:inline-block;background:#25D366;color:#fff;text-decoration:none;border-radius:6px;padding:7px 12px;font-size:12px;font-weight:600}
+  .hide-owner .owner-col{display:none}
+  @media print{
+    body{background:#fff}
+    .no-print{display:none !important}
+    .page{max-width:none;padding:0}
+    table{font-size:10.5px}
+    thead th{position:static}
+    tbody tr{break-inside:avoid}
+    th,td{white-space:normal}
+    @page{size:A4 landscape; margin:8mm}
+    .seg-card{background:#f3eede}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="brand">
+    <div>
+      <h1>ELEGANCE · LISTA MAYORISTA</h1>
+      <small>Perfumes originales — revendedores y tiendas · Córdoba · Rosario · Buenos Aires</small>
+    </div>
+    <div style="text-align:right;font-size:12px;color:#6b6754">
+      Dólar blue: <b id="tcLabel">…</b><br>
+      Costo+flete incluido: <b id="cfLabel">…</b><br>
+      <small>Precios por unidad · mínimos por bulto</small>
+    </div>
+  </div>
+  <p class="tc-line">Cotización automática del dólar blue (DolarAPI) con respaldo configurable. Los precios se recalculan solos al abrir la página. Para enviar a un cliente: <b>Imprimir → Guardar como PDF</b> (las columnas internas de costo quedan ocultas automáticamente).</p>
+
+  <div class="cards" id="segCards"></div>
+
+  <div class="toolbar no-print">
+    <input id="q" type="search" placeholder="Buscar marca o nombre…" style="min-width:220px">
+    <select id="segFilter"><option value="">Todos los segmentos</option></select>
+    <select id="tierSel">
+      <option value="revendedor">Revendedor (1 bulto · 12 u)</option>
+      <option value="tienda">Tienda (2 bultos · 24 u) −5%</option>
+      <option value="mayorista">Mayorista (6 bultos · 72 u) −10%</option>
+    </select>
+    <button class="btn-gold" id="printBtn">Imprimir / PDF</button>
+    <button id="csvBtn">Descargar CSV (Excel)</button>
+    <button id="ownerToggle" title="Mostrar/ocultar columnas internas de costo y margen">Ver interna (costo/margen)</button>
+    <button id="waOrderBtn" style="background:#25D366;color:#fff;font-weight:600">Pedido por WhatsApp</button>
+  </div>
+
+  <table id="catalog">
+    <thead>
+      <tr>
+        <th class="num">#</th>
+        <th>Código</th>
+        <th>Marca</th>
+        <th>Nombre</th>
+        <th class="num">Costo<br>US$</th>
+        <th class="num">Costo<br>AR$ pto.</th>
+        <th class="num">Margen<br>bruto</th>
+        <th class="num">$ Revendedor<br>12 u</th>
+        <th class="num">$ Tienda<br>24 u</th>
+        <th class="num">$ Mayorista<br>72 u</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <p class="notes">
+    <b>Condiciones:</b> pedido mínimo <b>1 bulto mixto = 12 unidades</b> (entre 3 y 6 referencias). Rosario y Buenos Aires: mínimo <b>2 bultos = 24 unidades</b>. Precios por unidad en pesos, gastos de envío incluidos en el cuadro según plaza, retiro/punto de entrega coordinado por WhatsApp. Rotación semanal de reposición. Sin factura por el momento; se cobra contra entrega / seña + contra entrega.
+  </p>
+
+  <div class="foot">
+    <div><b>ELEGANCE</b> · +54 9 3757 655746 · eleganceventas2026@gmail.com</div>
+    <div>Lista mayorista · vigencia semanal · 2026</div>
+  </div>
+</div>
+
+<script src="../js/products.js"></script>
+<script src="../js/pricing.js"></script>
+<script>
+(function () {
+  var table = document.getElementById("rows");
+  var tcLabel = document.getElementById("tcLabel");
+  var cfLabel = document.getElementById("cfLabel");
+  var segCards = document.getElementById("segCards");
+  var segFilter = document.getElementById("segFilter");
+  var q = document.getElementById("q");
+  var tierSel = document.getElementById("tierSel");
+  var WA = "5493757655746";
+  var SEG_LABEL = { arabe: "Árabe (agresivo)", mid: "Comercial", nicho: "Nicho", lujo: "Lujo" };
+  var SEG_COLOR = { arabe: "#1e7a46", mid: "#caa12a", nicho: "#6d4aa5", lujo: "#8a2b2b" };
+  var tierKey = function () { return tierSel.value; };
+
+  function renderCards() {
+    var counts = {};
+    PRODUCTS.forEach(function (p) { var s = PRICING.segOf(p); counts[s] = (counts[s] || 0) + 1; });
+    segCards.innerHTML = Object.keys(SEG_LABEL).map(function (s) {
+      var m = PRICING.SEGMENT_MARGIN[s];
+      return '<div class="seg-card" style="background:' + SEG_COLOR[s] + '"><b>' + SEG_LABEL[s] + '</b>' +
+             '<span>x' + (counts[s] || 0) + ' · margen ' + Math.round((m / (1 + m)) * 100) + '% +</span></div>';
+    }).join("");
+  }
+
+  function row(p, i) {
+    var t = PRICING.tierByKey(tierKey());
+    var base = PRICING.unitPrice(p, PRICING.TIERS[0]);
+    var costs = PRICING.costARS(p);
+    var margin = PRICING.SEGMENT_MARGIN[PRICING.segOf(p)];
+    var ml = (p.name.match(/\d+(?:\.\d+)?\s?ml/i) || [""])[0];
+    var uds = t.minUnits;
+    var total = PRICING.unitPrice(p, t) * uds;
+    return "<tr>" +
+      '<td class="num">' + (i + 1) + "</td>" +
+      "<td>" + p.id + "</td>" +
+      "<td><b>" + p.brand + "</b></td>" +
+      "<td>" + p.name + (ml ? " <small>(" + ml + ")</small>" : "") + "</td>" +
+      '<td class="num owner-col">' + p.price.toFixed(2) + "</td>" +
+      '<td class="num owner-col">' + Math.round(costs).toLocaleString("es-AR") + "</td>" +
+      '<td class="num owner-col">' + Math.round(margin * 100) + "%</td>" +
+      '<td class="num" data-id="' + p.id + '" data-tier="revendedor">' + PRICING.fmtARS(PRICING.unitPrice(p, PRICING.TIERS[0])) + "</td>" +
+      '<td class="num">' + PRICING.fmtARS(PRICING.unitPrice(p, PRICING.TIERS[1])) + "</td>" +
+      '<td class="num">' + PRICING.fmtARS(PRICING.unitPrice(p, PRICING.TIERS[2])) + "</td>" +
+      "</tr>";
+  }
+
+  function render() {
+    var seg = segFilter.value;
+    var term = q.value.trim().toLowerCase();
+    var items = PRODUCTS.filter(function (p) {
+      var okSeg = !seg || PRICING.segOf(p) === seg;
+      var okTerm = !term || (p.brand + " " + p.name).toLowerCase().indexOf(term) >= 0;
+      return okSeg && okTerm;
+    });
+    table.innerHTML = items.map(row).join("");
+  }
+
+  // ---- acciones de la página ----
+  q.addEventListener("input", render);
+  segFilter.addEventListener("change", render);
+  tierSel.addEventListener("change", render);
+
+  segFilter.innerHTML = '<option value="">Todos los segmentos</option>' +
+    Object.keys(SEG_LABEL).map(function (s) { return '<option value="' + s + '">' + SEG_LABEL[s] + "</option>"; }).join("");
+
+  document.getElementById("printBtn").addEventListener("click", function () { window.print(); });
+
+  document.getElementById("ownerToggle").addEventListener("click", function (e) {
+    document.body.classList.toggle("hide-owner");
+    e.target.textContent = e.target.textContent.indexOf("Ocultar") >= 0 ? "Ver interna (costo/margen)" : "Ocultar interna (costo/margen)";
+  });
+
+  // ---- CSV (incluye columnas internas para el dueño; borrar antes de compartir) ----
+  function csvDownload() {
+    var sep = ";";
+    var head = ["codigo","marca","nombre","genero","ml","segmento","costoUSD","costoARSpuesto","margenBruto","ars_revendedor","ars_tienda","ars_mayorista"].join(sep);
+    var esc = function (v) { return '"' + String(v).replace(/"/g, '""') + '"'; };
+    var lines = PRODUCTS.map(function (p) {
+      var seg = PRICING.segOf(p);
+      var ml = (p.name.match(/\d+(?:\.\d+)?\s?ml/i) || [""])[0];
+      return [p.id, p.brand, p.name, p.gender, ml, seg, p.price.toFixed(2),
+              Math.round(PRICING.costARS(p)),
+              Math.round(PRICING.SEGMENT_MARGIN[seg] * 100),
+              PRICING.unitPrice(p, PRICING.TIERS[0]),
+              PRICING.unitPrice(p, PRICING.TIERS[1]),
+              PRICING.unitPrice(p, PRICING.TIERS[2])].map(esc).join(sep);
+    });
+    var blob = new Blob(["\uFEFF" + head + "\n" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "elegance-lista-mayorista.csv";
+    a.click();
+  }
+  document.getElementById("csvBtn").addEventListener("click", csvDownload);
+
+  // ---- Pedido por WhatsApp (con escalón elegido y cantidades 1x por fila) ----
+  document.getElementById("waOrderBtn").addEventListener("click", function () {
+    var t = PRICING.tierByKey(tierKey());
+    var lines = PRODUCTS.map(function (p, i) {
+      return i + 1 + ". " + p.brand + " " + p.name + " x1 = " + PRICING.fmtARS(PRICING.unitPrice(p, t));
+    });
+    var msg = "Hola ELEGANCE, quiero armar mi pedido mayorista (" + t.label.toLowerCase() + "):\n" +
+              lines.slice(0, 24).join("\n") + "\n\n(Completo el detalle y cantidades contigo)";
+    window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent(msg), "_blank");
+  });
+
+  PRICING.refreshTC().then(function () {
+    tcLabel.textContent = PRICING.fmtARS(PRICING.getTC()).replace("$", "$");
+    cfLabel.textContent = "+" + Math.round((PRICING.COST_FACTOR - 1) * 100) + "%";
+    renderCards();
+    render();
+  });
+
+  // re-render en cada cambio de TC (mantiene coherente la vista)
+  window.addEventListener("focus", function () {
+    PRICING.refreshTC().then(function () { tcLabel.textContent = PRICING.fmtARS(PRICING.getTC()); render(); });
+  });
+})();
+</script>
+</body>
+</html>
