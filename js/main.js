@@ -305,7 +305,9 @@
       return `- ${p.name} x${i.qty} = ${fmt(p.final * i.qty)}`;
     });
     const total = cart.reduce((a, i) => a + (PRODUCTS.find((x) => x.id === i.id)?.final || 0) * i.qty, 0);
-    const msg = encodeURIComponent(`Hola Elegance, quiero hacer este pedido:\n${lines.join("\n")}\n\nTotal: ${fmt(total)}`);
+    const env = (typeof window.SHIP_LINE === "function" ? window.SHIP_LINE() : null);
+    const envio = env ? "Envío estimado: " + env.text : "";
+    const msg = encodeURIComponent(`Hola Elegance, quiero hacer este pedido:\n${lines.join("\n")}\n${envio}\n\nTotal: ${fmt(total)}`);
     window.open(`https://wa.me/${WA}?text=${msg}`, "_blank");
     showToast("¡Gracias por tu pedido en Elegance!");
     cart = [];

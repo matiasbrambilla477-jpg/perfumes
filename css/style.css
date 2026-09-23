@@ -577,6 +577,126 @@ button { font-family: inherit; cursor: pointer; }
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+/* ---------- Simulador de envíos ---------- */
+.shipping-section { background: #f6efe3; padding: 70px 0; border-top: 1px solid var(--line); }
+.ship-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 380px) 1fr;
+  gap: 30px;
+  align-items: start;
+  max-width: 940px;
+  margin: 0 auto;
+}
+.ship-form {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ship-label { font-size: 0.8rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; }
+.ship-input {
+  padding: 11px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--ink);
+  outline: none;
+  width: 100%;
+}
+.ship-input:focus { border-color: var(--gold); }
+.ship-radio { display: flex; gap: 18px; font-size: 0.9rem; flex-wrap: wrap; }
+.ship-radio label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.ship-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.ship-chips button {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  padding: 7px 14px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.ship-chips button:hover { border-color: var(--gold); color: var(--gold-dark); }
+.ship-check { display: flex; align-items: center; gap: 8px; font-size: 0.88rem; color: var(--ink); cursor: pointer; }
+.ship-hint { font-size: 0.78rem; color: var(--gray); margin-top: -4px; }
+.ship-results { display: flex; flex-direction: column; gap: 10px; }
+.ship-placeholder {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px dashed var(--gold);
+  border-radius: 12px;
+  padding: 22px;
+  color: var(--gray);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.ship-placeholder em { display: block; margin-top: 8px; font-size: 0.78rem; color: #9a8f7f; }
+.ship-sum { font-size: 0.82rem; color: var(--gray); margin: 0 0 4px; }
+.company-row {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--gold);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.company-row:first-of-type { border-left-color: #1e7a46; }
+.cr-info { display: flex; flex-direction: column; gap: 3px; }
+.cr-info strong { font-size: 0.95rem; }
+.cr-info span { font-size: 0.76rem; color: var(--gray); max-width: 420px; }
+.cr-data { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+.cr-data b { font-family: var(--serif); font-size: 1.25rem; color: var(--danger); white-space: nowrap; }
+.cr-data span { font-size: 0.74rem; color: var(--gray); }
+.ship-badge {
+  display: inline-block;
+  background: #1e7a46;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 10px;
+  width: fit-content;
+}
+
+/* ---------- Envío en el carrito ---------- */
+.ship-in-cart {
+  border-bottom: 1px solid var(--line);
+  padding: 14px 0 16px;
+  margin-bottom: 16px;
+}
+.ship-in-cart h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gray); margin-bottom: 10px; }
+.ship-in-cart .ship-input { margin-bottom: 8px; }
+.ship-in-cart .ship-radio { margin-bottom: 10px; }
+.ship-in-cart .ship-hint { margin: 0 0 8px; }
+.ship-mini-btn {
+  width: 100%;
+  background: var(--ink);
+  color: #f5ead0;
+  border: none;
+  border-radius: 6px;
+  padding: 10px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+.ship-mini-btn:hover { background: var(--gold-dark); color: #fff; }
+#cart-ship .company-row { padding: 10px 12px; }
+#cart-ship .company-row .cr-info span { display: none; }
+#cart-ship .cr-data b { font-size: 1.05rem; }
+
+@media (max-width: 860px) {
+  .ship-layout { grid-template-columns: 1fr; }
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 860px) {
   .nav {
