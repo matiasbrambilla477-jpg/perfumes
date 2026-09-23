@@ -1045,3 +1045,88 @@ button { font-family: inherit; cursor: pointer; }
     transform: none !important;
   }
 }
+
+/* ---------- Cómo comprás (4 pasos) ---------- */
+.howto { padding: 72px 0; }
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+  gap: 22px;
+  max-width: 1080px;
+  margin: 0 auto 42px;
+}
+.step {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 30px 20px 24px;
+  text-align: center;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.step:hover { transform: translateY(-5px); box-shadow: 0 16px 34px rgba(28, 25, 23, 0.1); }
+.step-num {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #e2c277 0%, var(--gold) 55%, var(--gold-dark) 100%);
+  color: #fff;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 0.85rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 14px rgba(201, 162, 75, 0.45);
+}
+.step svg { width: 36px; height: 36px; color: var(--gold-dark); margin: 4px auto 10px; display: block; }
+.step h3 { font-size: 0.98rem; margin-bottom: 8px; }
+.step p { font-size: 0.86rem; color: var(--gray); line-height: 1.55; }
+.howto-cta { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+
+/* ---------- Testimonios ---------- */
+.testimonials {
+  background: #fff;
+  border-top: 1px solid var(--line);
+  padding: 72px 0;
+}
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 22px;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+.t-card {
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 10px 24px rgba(28, 25, 23, 0.05);
+}
+.t-stars { color: var(--gold); letter-spacing: 3px; font-size: 0.95rem; }
+.t-text { font-size: 0.9rem; line-height: 1.6; font-style: italic; }
+.t-who { display: flex; align-items: center; gap: 12px; margin-top: auto; padding-top: 8px; }
+.t-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #f5ead0;
+  font-family: var(--serif);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.t-who strong { display: block; font-size: 0.9rem; }
+.t-verified { font-size: 0.72rem; color: var(--gold-dark); font-weight: 600; }
+.t-verified::before { content: "✓ "; font-weight: 700; }
