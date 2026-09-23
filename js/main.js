@@ -41,6 +41,29 @@
   let sortBy = "default";
   let cart = JSON.parse(localStorage.getItem("elegance-cart") || "[]");
 
+  // ---------- Reveal on scroll / UX ----------
+  let revealObserver = null;
+  function observeReveals() {
+    if (!("IntersectionObserver" in window)) {
+      document.querySelectorAll(".reveal, .reveal-card").forEach((el) => el.classList.add("in"));
+      return;
+    }
+    if (revealObserver) revealObserver.disconnect();
+    revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (en.isIntersecting) { en.target.classList.add("in"); revealObserver.unobserve(en.target); }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+    document.querySelectorAll(".reveal, .reveal-card").forEach((el) => revealObserver.observe(el));
+  }
+
+  const headerEl = document.querySelector(".header");
+  if (headerEl) {
+    window.addEventListener("scroll", () => {
+      headerEl.classList.toggle("scrolled", window.scrollY > 12);
+    }, { passive: true });
+  }
+
   // ---------- Lightbox ----------
   const lightbox = document.createElement("div");
   lightbox.className = "lightbox";
@@ -80,7 +103,7 @@
   }
 
   // ---------- Render ----------
-  function cardHTML(p) {
+  function cardHTML(p, i = 0) {
     const waMsg = encodeURIComponent(`Hola Elegance, me interesa el ${p.name} (${GENDER_LABEL[p.gender]}) que está a ${fmt(p.final)}.`);
     const hasNotes = p.notes && p.notes.top;
     const imgs = imgsOf(p);
@@ -92,7 +115,8 @@
         </div>`
       : "";
     return `
-      <article class="card" data-cat="${p.gender}">
+      <article class="card reveal-card" data-cat="${p.gender}" style="--d:${(i % 12) * 0.05}s">
+        <span class="card-ship-tag">🚚 Envío a todo el país</span>
         <div class="card-img-wrap">
           <button class="gallery-btn" data-lightbox="${imgs[0]}" aria-label="Ampliar foto">
             <img src="${imgs[0]}" alt="${p.name}" loading="lazy" onerror="this.closest('.card').style.display='none'">
@@ -135,7 +159,8 @@
       grid.innerHTML = '<p style="text-align:center;color:var(--gray)">No hay productos que coincidan con tu búsqueda.</p>';
       return;
     }
-    grid.innerHTML = items.map(cardHTML).join("");
+    grid.innerHTML = items.map((p, i) => cardHTML(p, i)).join("");
+    observeReveals();
   }
 
   filters.addEventListener("click", (e) => {
@@ -223,12 +248,19 @@
   // ---------- Cart ----------
   function save() { localStorage.setItem("elegance-cart", JSON.stringify(cart)); }
 
+  function bumpCart() {
+    cartCount.classList.remove("bump");
+    void cartCount.offsetWidth;
+    cartCount.classList.add("bump");
+  }
+
   function addToCart(p, qty = 1) {
     const existing = cart.find((i) => i.id === p.id);
     if (existing) existing.qty += qty;
     else cart.push({ id: p.id, qty });
     save();
     renderCart();
+    bumpCart();
     showToast(p.name + " agregado");
   }
 
@@ -263,7 +295,7 @@
       if (!p) return "";
       return `
         <div class="cart-item">
-          <img src="${p.img}" alt="${p.name}">
+          <img src="${p.img}" alt="${p.name}" loading="lazy">
           <div class="cart-item-info">
             <p class="ci-name">${p.name}</p>
             <p class="ci-price">${fmt(p.final * i.qty)}</p>
@@ -328,4 +360,5 @@
   renderGrid();
   renderCart();
   fetchBlueRate();
+  observeReveals();
 })();

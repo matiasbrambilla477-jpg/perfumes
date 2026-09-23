@@ -16,9 +16,23 @@
   <meta name="theme-color" content="#1c1917">
 </head>
 <body>
+  <script>document.documentElement.classList.add("js");</script>
 
   <div class="announcement-bar">
-    <span>&#9993; Perfumes 100% originales &middot; Consultas y envíos por WhatsApp</span>
+    <div class="marquee" aria-label="Noticias de Elegance">
+      <div class="marquee-track">
+        <span><strong>&#9992; Envíos a todo el país</strong></span><span class="dot">&#10022;</span>
+        <span>Perfumes 100% originales</span><span class="dot">&#10022;</span>
+        <span>Nueva colección disponible</span><span class="dot">&#10022;</span>
+        <span>Consultas y envíos por WhatsApp</span><span class="dot">&#10022;</span>
+      </div>
+      <div class="marquee-track" aria-hidden="true">
+        <span><strong>&#9992; Envíos a todo el país</strong></span><span class="dot">&#10022;</span>
+        <span>Perfumes 100% originales</span><span class="dot">&#10022;</span>
+        <span>Nueva colección disponible</span><span class="dot">&#10022;</span>
+        <span>Consultas y envíos por WhatsApp</span><span class="dot">&#10022;</span>
+      </div>
+    </div>
   </div>
 
   <header class="header">
@@ -42,21 +56,32 @@
 
   <section class="hero" id="inicio">
     <div class="container hero-inner">
-      <p class="hero-overline">Perfumería de autor · Envíos a todo el país</p>
-      <h1 class="hero-title">Elige la <em>elegancia</em> que te define</h1>
-      <p class="hero-sub">Perfumes originales masculinos, femeninos y unisex. Seleccionados para quienes buscan distinción en cada detalle.</p>
-      <div class="hero-cta">
-        <a href="#catalogo" class="btn btn-gold">Ver catálogo</a>
+      <div class="hero-text">
+        <p class="hero-overline hero-anim d1">Perfumería de autor · <strong>Envíos a todo el país</strong></p>
+        <h1 class="hero-title hero-anim d2">Elige la <em>elegancia</em> que te define</h1>
+        <p class="hero-sub hero-anim d3">Perfumes originales masculinos, femeninos y unisex. Seleccionados para quienes buscan distinción en cada detalle.</p>
+        <div class="hero-cta hero-anim d4">
+          <a href="#catalogo" class="btn btn-gold btn-lg">Ver catálogo</a>
+          <a href="#envios" class="btn btn-ghost btn-lg">Cotizar mi envío</a>
+        </div>
+        <div class="hero-badges hero-anim d4">
+          <span>&#10003; Envíos a todo el país</span>
+          <span>&#10003; 100% Originales</span>
+          <span>&#10003; Fragancias de lujo</span>
+          <span>&#10003; Nueva colección</span>
+        </div>
       </div>
-      <div class="hero-badges">
-        <span>&#10003; 100% Originales</span>
-        <span>&#10003; Fragancias de lujo</span>
-        <span>&#10003; Nueva colección</span>
+      <div class="hero-visual hero-anim d2" aria-hidden="true">
+        <span class="h-glow"></span>
+        <span class="h-halo"></span>
+        <img class="h-bottle b1" src="img/products/886986.png" alt="" loading="eager">
+        <img class="h-bottle b2" src="img/products/23464.png" alt="" loading="eager">
+        <img class="h-bottle b3" src="img/products/26243.png" alt="" loading="eager">
       </div>
     </div>
   </section>
 
-  <section class="benefits" id="beneficios">
+  <section class="benefits reveal" id="beneficios">
     <div class="container benefits-inner">
       <div class="benefit">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
@@ -77,9 +102,21 @@
     </div>
   </section>
 
+  <section class="ship-strip">
+    <div class="container ship-strip-inner">
+      <div class="ship-strip-lead">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <div><strong>Enviamos a todo el país</strong><span>Correo Argentino · OCA · Andreani · Vía Cargo</span></div>
+      </div>
+      <div class="ship-strip-chips">
+        <span>Córdoba</span><span>Rosario</span><span>Buenos Aires</span><span>Mendoza</span><span>Salta</span><span>Tucumán</span><span>Neuquén</span><span class="more">… y el resto del país</span>
+      </div>
+    </div>
+  </section>
+
   <main class="container">
     <section id="catalogo">
-      <div class="section-head">
+      <div class="section-head reveal">
         <h2>Nuestro Catálogo</h2>
         <p>Fragancias seleccionadas del catálogo de referencia.</p>
       </div>
@@ -110,7 +147,7 @@
 
   <section class="shipping-section" id="envios">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head reveal">
         <h2>Simulador de envíos</h2>
         <p>Calculá el flete a tu provincia <strong>antes</strong> de armar el pedido. Comparativa de referencia de 4 empresas de Argentina (peso vs. volumen).</p>
       </div>
@@ -145,7 +182,7 @@
     </div>
   </section>
 
-  <section class="promo-banner" id="info">
+  <section class="promo-banner reveal" id="info">
     <div class="container promo-inner">
       <h2>Perfumes originales, siempre</h2>
       <p>Trabajamos con perfumes 100% originales. Si querés conocer las notas de una fragancia o ver la presentación, escribinos.</p>
@@ -207,7 +244,7 @@
         <strong id="cart-total">US$ 0.00</strong>
       </div>
       <button class="btn btn-gold btn-block" id="checkout-btn">Solicitar pedido</button>
-      <p class="cart-note">Se te contactará por WhatsApp para coordinar el pago y el envío.</p>
+      <p class="cart-note"><strong>&#128666; Envíos a todo el país</strong><br>Se te contactará por WhatsApp para coordinar pago y envío.</p>
     </div>
   </aside>
 
