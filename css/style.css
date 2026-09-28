@@ -1130,3 +1130,37 @@ button { font-family: inherit; cursor: pointer; }
 .t-who strong { display: block; font-size: 0.9rem; }
 .t-verified { font-size: 0.72rem; color: var(--gold-dark); font-weight: 600; }
 .t-verified::before { content: "✓ "; font-weight: 700; }
+
+/* ---------- Combos Mayoristas ---------- */
+.card-combo {
+  border: 1px solid var(--gold);
+  box-shadow: 0 14px 34px rgba(201, 162, 75, 0.2);
+}
+.card-combo .card-img-wrap {
+  background: linear-gradient(135deg, #fffdf6, #f2ead9);
+}
+.card-combo-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  background: linear-gradient(135deg, #e2c277 0%, var(--gold) 60%, var(--gold-dark) 100%);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 5px 11px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(201, 162, 75, 0.4);
+}
+.card-combo .card-brand {
+  color: var(--gold-dark);
+  letter-spacing: 2px;
+  font-size: 0.7rem;
+}
+.combo-unit {
+  font-size: 0.78rem;
+  color: var(--gold-dark);
+  font-weight: 600;
+  margin: 0 0 10px;
+}

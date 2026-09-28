@@ -1,8 +1,10 @@
 // Catálogo Elegance - solo perfumes
 // price = costo de reposición de referencia (US$, catálogo del proveedor)
-// final = precio de venta RETAIL USD = price * (1 + margen retail del segmento)
+// final = precio de venta RETAIL USD de referencia = price * (1 + margen retail del segmento)
+// retailARS = precio RETAIL EN AR$ (Fijo, decidido por la marca): $40.000 por unidad.
+// Los items con type:"combo" son packs mayoristas con retailARS cerrado (Combo 5 = 165.000 / Combo 10 = 300.000).
 // notes = pirámide olfativa (salida / corazón / fondo)
-// Segmentos con margen diferenciado: arabe (agresivo) / mid / nicho / lujo
+// Segmentos con margen diferenciado (USD de referencia): arabe (agresivo) / mid / nicho / lujo
 
 const SEGMENT_FALLBACK = "mid";
 const SEGMENT_BY_BRAND = {
@@ -20,8 +22,12 @@ const SEGMENT_BY_BRAND = {
 };
 // Margen retail (web) por segmento, en USD sobre el costo de reposición
 const RETAIL_MARGIN = { arabe: 0.5, mid: 0.65, nicho: 0.8, lujo: 0.9 };
+// Precio unitario minorista FIJO en AR$ (decidido por la marca para toda la tienda)
+const RETAIL_ARS_UNITARIO = 40000;
 
 const PRODUCTS = [
+  { id: 988801, type: "combo", units: 5, brand: "ELEGANCE", name: "Combo Pack 5 — Surtido Inicial Mayorista", gender: "C", price: 124.00, retailARS: 165000, unitPriceARS: 33000, img: "img/products/combo5.png", desc: "Pack de 5 perfumes surtidos elegidos de nuestro stock actual (ideal para revendedores).", members: [887875, 26243, 26300, 21394, 68339] },
+  { id: 988802, type: "combo", units: 10, brand: "ELEGANCE", name: "Combo Pack 10 — Catálogo Completo Distribuidor", gender: "C", price: 223.00, retailARS: 300000, unitPriceARS: 30000, img: "img/products/combo10.png", desc: "Pack cerrado que incluye exactamente los 10 perfumes de nuestro stock actual, sin repetir.", members: [887875, 21394, 26300, 760111, 760112, 103239, 760113, 2057, 26243, 760114] },
   { id: 198376, brand: "ARMAF", name: "Odyssey Dubai Chocolat EDP 100ml", gender: "U", price: 16.99, img: "img/products/198376.png", notes: { top: "café, pistacho, avellana, praliné, knafé", heart: "chocolate, vainilla, cardamomo", base: "caramelo, haba tonka, maderas ámbar" } },
   { id: 204757, brand: "LATTAFA", name: "Fakhar Platin EDP 100ml", gender: "U", price: 22.00, img: "img/products/204757.png", notes: { top: "bergamota, pimienta rosa, cardamomo", heart: "guayaba, lavanda, jengibre", base: "incienso, palo santo, sándalo" } },
   { id: 12091, brand: "JACQUES BOGART", name: "Silver Scent EDT 100ml", gender: "M", price: 20.00, img: "img/products/12091.png", notes: { top: "azahar, limón", heart: "lavanda, cardamomo, nuez moscada, romero, cilantro, geranio", base: "litchi, haba tonka, madera de teca, vetiver" } },
@@ -99,10 +105,16 @@ const PRODUCTS = [
   { id: 235862, brand: "AFNAN", name: "9PM Night Out Extrait 100ml", gender: "U", price: 45.00, img: "img/products/235862.png", notes: { top: "fruta del dragón, bergamota, coñac, lavanda, manzana", heart: "cardamomo, mahonial, ante, toffee, cedro", base: "haba tonka, akigalawood, ambrofix, pachulí" } },
   { id: 82570, brand: "LATTAFA", name: "Teriaq EDP 100ml", gender: "U", price: 24.00, img: "img/products/82570.png", notes: { top: "pimienta rosa, caramelo, almendra amarga, albaricoque", heart: "miel, flores blancas, ruibarbo, rosa", base: "vainilla, cuero, ládano, almizcle, vetiver" } },
   { id: 203229, brand: "LATTAFA", name: "Atheeri EDP 100ml", gender: "F", price: 55.00, img: "img/products/203229.png", notes: { top: "flor de la pasión, gotas de rocío", heart: "orquídea, jazmín", base: "vainilla, madera ámbar" } },
+  { id: 760111, brand: "LATTAFA", name: "Asad Bourbon EDP 100ml", gender: "M", price: 22.00, img: "img/products/760111.png", notes: { top: "canela, jengibre, azafrán", heart: "damasco, haba tonka, caramelo", base: "tabaco, madera seca, almizcle" } },
+  { id: 760112, brand: "ASDAAF", name: "Ameerat Al Sharq Parfum 100ml", gender: "F", price: 18.00, img: "img/products/760112.png", notes: { top: "azafrán, rosa, ciruela", heart: "jazmín, gardenia, ricino", base: "ámbar, oud, almizcle, vainilla" } },
+  { id: 760113, brand: "ASDAAF", name: "Ameerat Al Arab EDP 100ml", gender: "F", price: 18.00, img: "img/products/760113.png", notes: { top: "mandarina, rosa, frambuesa", heart: "jazmín, peonía, musk blanco", base: "pachulí, almizcle, vainilla" } },
+  { id: 760114, brand: "LATTAFA", name: "Yara Elixir EDP 100ml", gender: "F", price: 23.00, img: "img/products/760114.png", notes: { top: "bayas dulces, mandarina", heart: "orquídea, heliotropo, cachemira", base: "vainilla, almizcle, sándalo" } },
 ];
 
-// Precio retail (USD) con margen diferenciado por segmento
+// Precio retail (USD) de referencia con margen diferenciado por segmento
+// + Precio retail FIJO en AR$ (los combos ya traen su retailARS cerrado)
 PRODUCTS.forEach((p) => {
   p.seg = SEGMENT_BY_BRAND[p.brand] || SEGMENT_FALLBACK;
   p.final = Math.round(p.price * (1 + (RETAIL_MARGIN[p.seg] || RETAIL_MARGIN.mid)) * 100) / 100;
+  if (p.retailARS == null) p.retailARS = RETAIL_ARS_UNITARIO;
 });

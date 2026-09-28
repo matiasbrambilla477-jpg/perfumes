@@ -14,28 +14,10 @@
   const toast = document.getElementById("toast");
 
   const WA = "5493757655746";
-  // COTIZACIÓN AUTOMÁTICA DEL DÓLAR BLUE (ARS) — se obtiene de DolarAPI (venta).
-  // Si la API no responde, se usa este respaldo fijo (actualizalo manualmente):
-  const USD_TO_ARS_FALLBACK = 1240; // 1 US$ = X$ ARS (solo si la API falla)
-  let USD_TO_ARS = USD_TO_ARS_FALLBACK;
-  const fmt = (n) => "$ " + Math.round(n * USD_TO_ARS).toLocaleString("es-AR");
-
-  // DolarAPI — dólar blue, cotización de VENTA (referencia de reposición de mercadería)
-  async function fetchBlueRate() {
-    try {
-      const res = await fetch("https://dolarapi.com/v1/dolares/blue");
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      const data = await res.json();
-      const venta = Number(data.venta);
-      if (!isNaN(venta) && venta > 0) USD_TO_ARS = venta;
-    } catch (err) {
-      USD_TO_ARS = USD_TO_ARS_FALLBACK; // respaldo: se cae la API → usamos el número fijo
-      console.warn("DolarAPI no disponible, usando respaldo:", USD_TO_ARS_FALLBACK);
-    }
-    renderGrid();
-    renderCart();
-  }
-  const GENDER_LABEL = { F: "Femenino", M: "Masculino", U: "Unisex" };
+  // Precios RETAIL FIJOS en AR$ (definidos en js/products.js -> retailARS).
+  const fmtARS = (n) => "$ " + Math.round(n).toLocaleString("es-AR");
+  const priceOf = (p) => Number(p.retailARS) || 40000;
+  const GENDER_LABEL = { F: "Femenino", M: "Masculino", U: "Unisex", C: "Mayorista" };
   let activeFilter = "todos";
   let searchTerm = "";
   let sortBy = "default";
@@ -80,14 +62,16 @@
   // ---------- Filtering ----------
   function getVisibleProducts() {
     let items = PRODUCTS.filter((p) => {
-      const matchFilter = activeFilter === "todos" || p.gender === activeFilter;
+      const matchFilter = activeFilter === "todos" || activeFilter === "C"
+        ? (p.type === "combo") === (activeFilter === "C")
+        : (p.type !== "combo" && p.gender === activeFilter);
       const matchSearch = !searchTerm ||
         (p.brand + " " + p.name).toLowerCase().includes(searchTerm);
       return matchFilter && matchSearch;
     });
 
-    if (sortBy === "price-asc") items = [...items].sort((a, b) => a.final - b.final);
-    else if (sortBy === "price-desc") items = [...items].sort((a, b) => b.final - a.final);
+    if (sortBy === "price-asc") items = [...items].sort((a, b) => priceOf(a) - priceOf(b));
+    else if (sortBy === "price-desc") items = [...items].sort((a, b) => priceOf(b) - priceOf(a));
     else if (sortBy === "name") items = [...items].sort((a, b) => (a.brand + a.name).localeCompare(b.brand + b.name));
     else if (sortBy === "id") items = [...items].sort((a, b) => b.id - a.id);
     return items;
@@ -104,19 +88,21 @@
 
   // ---------- Render ----------
   function cardHTML(p, i = 0) {
-    const waMsg = encodeURIComponent(`Hola Elegance, me interesa el ${p.name} (${GENDER_LABEL[p.gender]}) que está a ${fmt(p.final)}.`);
+    const isCombo = p.type === "combo";
+    const gLab = GENDER_LABEL[p.gender] || "Perfume";
+    const waMsg = encodeURIComponent(`Hola Elegance, me interesa el ${p.name} (${gLab}) que está a ${fmtARS(priceOf(p))}.`);
     const hasNotes = p.notes && p.notes.top;
     const imgs = imgsOf(p);
     const size = sizeOf(p);
-    const shareMsg = encodeURIComponent(`Mirá este perfume en Elegance: ${p.name} (${GENDER_LABEL[p.gender]}) por ${fmt(p.final)} ${location.href.split('#')[0]}`);
+    const shareMsg = encodeURIComponent(`Mirá este perfume en Elegance: ${p.name} (${gLab}) por ${fmtARS(priceOf(p))} ${location.href.split('#')[0]}`);
     const thumbs = imgs.length > 1
       ? `<div class="thumb-row">
           ${imgs.map((src, i) => `<button class="thumb ${i === 0 ? 'active' : ''}" data-thumb="${i}" aria-label="Foto ${i + 1}"><img src="${src}" alt="" loading="lazy"></button>`).join("")}
         </div>`
       : "";
     return `
-      <article class="card reveal-card" data-cat="${p.gender}" style="--d:${(i % 12) * 0.05}s">
-        <span class="card-ship-tag">🚚 Envío a todo el país</span>
+      <article class="card reveal-card${isCombo ? " card-combo" : ""}" data-cat="${p.gender}" style="--d:${(i % 12) * 0.05}s">
+        ${isCombo ? `<span class="card-combo-tag">MAYORISTA</span>` : `<span class="card-ship-tag">🚚 Envío a todo el país</span>`}
         <div class="card-img-wrap">
           <button class="gallery-btn" data-lightbox="${imgs[0]}" aria-label="Ampliar foto">
             <img src="${imgs[0]}" alt="${p.name}" loading="lazy" onerror="this.closest('.card').style.display='none'">
@@ -124,29 +110,33 @@
           ${thumbs}
         </div>
         <div class="card-body">
-          <p class="card-brand">${p.brand}</p>
+          <p class="card-brand">${isCombo ? "PACK MAYORISTA" : p.brand}</p>
           <h3 class="card-name">${p.name}</h3>
           <div class="card-meta">
-            <p class="card-tag">${GENDER_LABEL[p.gender]}</p>
-            ${size ? `<p class="card-size">${size}</p>` : ""}
+            <p class="card-tag">${isCombo ? "Surtido" : GENDER_LABEL[p.gender]}</p>
+            ${isCombo ? `<p class="card-size">${p.units} perfumes</p>` : (size ? `<p class="card-size">${size}</p>` : "")}
           </div>
-          ${hasNotes ? `<details class="card-notes">
+          ${isCombo ? `<details class="card-notes">
+            <summary>Qué incluye</summary>
+            <p>${p.desc}</p>
+          </details>` : (hasNotes ? `<details class="card-notes">
             <summary>Notas de la fragancia</summary>
             <p><strong>Salida:</strong> ${p.notes.top}</p>
             <p><strong>Corazón:</strong> ${p.notes.heart}</p>
             <p><strong>Fondo:</strong> ${p.notes.base}</p>
-          </details>` : ""}
+          </details>` : "")}
           <div class="card-price-row">
-            <span class="price-now">${fmt(p.final)}</span>
+            <span class="price-now">${fmtARS(priceOf(p))}</span>
             <button class="share-btn" data-share="${p.id}" aria-label="Compartir">Compartir</button>
           </div>
+          ${isCombo ? `<p class="combo-unit">${fmtARS(p.unitPriceARS)} por perfume</p>` : ""}
           <div class="buy-row">
             <div class="qty" data-id="${p.id}">
               <button data-qdec aria-label="Quitar uno">&minus;</button>
               <span class="qty-val">1</span>
               <button data-qinc aria-label="Sumar uno">+</button>
             </div>
-            <button class="add-btn" data-id="${p.id}">Agregar al carrito</button>
+            <button class="add-btn" data-id="${p.id}">${isCombo ? "Agregar pack" : "Agregar al carrito"}</button>
           </div>
           <a class="wa-btn" href="https://wa.me/${WA}?text=${waMsg}" target="_blank" rel="noopener">Consultar por WhatsApp</a>
         </div>
@@ -230,7 +220,7 @@
   function handleShare(id) {
     const p = PRODUCTS.find((x) => x.id === id);
     if (!p) return;
-    const text = `Míralo en Elegance: ${p.name} (${GENDER_LABEL[p.gender]}) por ${fmt(p.final)}`;
+    const text = `Míralo en Elegance: ${p.name} (${GENDER_LABEL[p.gender] || "Perfume"}) por ${fmtARS(priceOf(p))}`;
     const url = location.href.split("#")[0];
     if (navigator.share) {
       navigator.share({ title: "Elegance - Perfumes", text, url }).catch(() => {});
@@ -286,7 +276,7 @@
 
     if (!cart.length) {
       cartItems.innerHTML = '<div class="cart-empty">Tu carrito está vacío.<br>Agregá tus fragancias favoritas.</div>';
-      cartTotal.textContent = fmt(0);
+      cartTotal.textContent = fmtARS(0);
       return;
     }
 
@@ -298,7 +288,7 @@
           <img src="${p.img}" alt="${p.name}" loading="lazy">
           <div class="cart-item-info">
             <p class="ci-name">${p.name}</p>
-            <p class="ci-price">${fmt(p.final * i.qty)}</p>
+            <p class="ci-price">${fmtARS(priceOf(p) * i.qty)}</p>
             <div class="ci-qty">
               <button data-dec="${p.id}" aria-label="Restar">&minus;</button>
               <span>${i.qty}</span>
@@ -309,8 +299,8 @@
         </div>`;
     }).join("");
 
-    const total = cart.reduce((a, i) => a + (PRODUCTS.find((x) => x.id === i.id)?.final || 0) * i.qty, 0);
-    cartTotal.textContent = fmt(total);
+    const total = cart.reduce((a, i) => a + priceOf(PRODUCTS.find((x) => x.id === i.id) || {}) * i.qty, 0);
+    cartTotal.textContent = fmtARS(total);
   }
 
   cartItems.addEventListener("click", (e) => {
@@ -334,12 +324,12 @@
     if (!cart.length) return;
     const lines = cart.map((i) => {
       const p = PRODUCTS.find((x) => x.id === i.id);
-      return `- ${p.name} x${i.qty} = ${fmt(p.final * i.qty)}`;
+      return `- ${p.name} x${i.qty} = ${fmtARS(priceOf(p) * i.qty)}`;
     });
-    const total = cart.reduce((a, i) => a + (PRODUCTS.find((x) => x.id === i.id)?.final || 0) * i.qty, 0);
+    const total = cart.reduce((a, i) => a + priceOf(PRODUCTS.find((x) => x.id === i.id) || {}) * i.qty, 0);
     const env = (typeof window.SHIP_LINE === "function" ? window.SHIP_LINE() : null);
     const envio = env ? "Envío estimado: " + env.text : "";
-    const msg = encodeURIComponent(`Hola Elegance, quiero hacer este pedido:\n${lines.join("\n")}\n${envio}\n\nTotal: ${fmt(total)}`);
+    const msg = encodeURIComponent(`Hola Elegance, quiero hacer este pedido:\n${lines.join("\n")}\n${envio}\n\nTotal: ${fmtARS(total)}`);
     window.open(`https://wa.me/${WA}?text=${msg}`, "_blank");
     showToast("¡Gracias por tu pedido en Elegance!");
     cart = [];
@@ -359,6 +349,5 @@
 
   renderGrid();
   renderCart();
-  fetchBlueRate();
   observeReveals();
 })();
