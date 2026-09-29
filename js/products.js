@@ -1,9 +1,7 @@
 // Catálogo Elegance — STOCK REAL (única fuente de verdad)
-// Solo los 10 perfumes del stock confirmado. Costo real por unidad: $20.800 ARS.
+// Solo los 10 perfumes del stock confirmado.
 // retailARS = precio minorista FIJO: $40.000 ARS por unidad.
 // Los ítems type:"combo" son packs mayoristas con precio cerrado (5 = $165.000 / 10 = $300.000).
-
-const COSTO_UNITARIO_ARS = 20800;
 
 const PRODUCTS = [
   // ---- Combos Mayoristas (precio cerrado) ----
