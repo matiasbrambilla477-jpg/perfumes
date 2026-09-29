@@ -62,8 +62,24 @@
     @page{size:A4 portrait; margin:8mm}
   }
   @media (max-width:640px){
+    .page{padding:10px}
+    .brand{flex-direction:column;align-items:flex-start;gap:6px}
+    .brand h1{font-size:21px;letter-spacing:2px}
+    .combos{grid-template-columns:1fr}
     .cc-images{grid-template-columns:repeat(auto-fill,minmax(58px,1fr))}
     .cc-images img.cc-member{width:56px;height:56px}
+    .toolbar input,.toolbar button{flex:1 1 100%}
+    .toolbar input{min-width:0}
+    table,thead,tbody,tr,td{display:block;width:100%}
+    thead{display:none}
+    tbody tr{background:#fff;border:2px solid #a98a3d;border-radius:12px;margin-bottom:12px;padding:12px;box-shadow:0 8px 20px rgba(23,20,16,.06)}
+    tbody tr:nth-child(even){background:#fff}
+    td{border:none;padding:5px 0;text-align:left !important;display:flex;justify-content:space-between;align-items:baseline;gap:10px;white-space:normal !important}
+    td::before{content:attr(data-label);font-size:10.5px;font-weight:700;letter-spacing:.5px;color:#7a5b00;flex-shrink:0}
+    td.num{text-align:left !important}
+    td.dname{flex-direction:column;align-items:flex-start}
+    td.dname .cc-pitch{text-align:left}
+    td.retail{font-size:16px}
   }
 </style>
 </head>
@@ -164,11 +180,11 @@
     });
     rows.innerHTML = items.map(function (p, i) {
       return "<tr>" +
-        '<td class="num">' + (i + 1) + "</td>" +
-        "<td>" + p.id + "</td>" +
-        '<td class="brand"><b>' + p.brand + "</b></td>" +
-        "<td>" + p.name + '<div class="cc-pitch">' + (p.pitch || "") + "</div></td>" +
-        '<td class="num retail">' + fmtARS(p.retailARS) + "</td>" +
+        '<td class="num" data-label="N&#186;">' + (i + 1) + "</td>" +
+        '<td data-label="C&#243;digo">' + p.id + "</td>" +
+        '<td class="brand" data-label="Marca"><b>' + p.brand + "</b></td>" +
+        '<td class="dname" data-label="Perfume">' + p.name + '<div class="cc-pitch">' + (p.pitch || "") + "</div></td>" +
+        '<td class="num retail" data-label="Precio x1">' + fmtARS(p.retailARS) + "</td>" +
         "</tr>";
     }).join("");
   }
