@@ -86,13 +86,22 @@ function New-Tile([System.Drawing.Graphics]$g, [System.Drawing.Rectangle]$tile, 
   $border = [System.Drawing.Pen]::new([System.Drawing.Color]::FromArgb(60, $GOLD_DARK), 1)
   $g.DrawPath($border, (New-Rounded $tile 12))
   $inner = [System.Drawing.Rectangle]::new($tile.X + 6, $tile.Y + 6, $tile.Width - 12, $tile.Height - 12)
-  if ($src -and (Test-Path -LiteralPath $src)) {
-    $img = [System.Drawing.Image]::FromFile($src)
-    $scale = [Math]::Min($inner.Width / $img.Width, $inner.Height / $img.Height)
-    $dw = [int]($img.Width * $scale); $dh = [int]($img.Height * $scale)
-    $dx = $tile.X + [int](($tile.Width - $dw) / 2); $dy = $tile.Y + [int](($tile.Height - $dh) / 2)
-    $g.DrawImage($img, $dx, $dy, $dw, $dh)
-    $img.Dispose()
+  $resolved = $null
+  foreach ($ext in ".png", ".webp", ".jpg") {
+    $cand = [System.IO.Path]::ChangeExtension($src, $ext)
+    if (Test-Path -LiteralPath $cand) { $resolved = $cand; break }
+  }
+  if ($resolved) {
+    try {
+      $img = [System.Drawing.Image]::FromFile($resolved)
+      $scale = [Math]::Min($inner.Width / $img.Width, $inner.Height / $img.Height)
+      $dw = [int]($img.Width * $scale); $dh = [int]($img.Height * $scale)
+      $dx = $tile.X + [int](($tile.Width - $dw) / 2); $dy = $tile.Y + [int](($tile.Height - $dh) / 2)
+      $g.DrawImage($img, $dx, $dy, $dw, $dh)
+      $img.Dispose()
+    } catch {
+      Draw-Bottle $g $inner $phLabel
+    }
   } else {
     Draw-Bottle $g $inner $phLabel
   }
@@ -163,12 +172,9 @@ function New-ComboPack([string]$outFile, [int[]]$members, [string]$comboLabel, [
 
 $productsDir = Join-Path $PSScriptRoot "..\img\products"
 
-New-Placeholder (Join-Path $productsDir "760111.png") "AB"
-New-Placeholder (Join-Path $productsDir "760112.png") "AS"
-New-Placeholder (Join-Path $productsDir "760113.png") "AA"
-New-Placeholder (Join-Path $productsDir "760114.png") "YE"
+# Nota: los 10 perfumes ya tienen foto real (png/webp/jpg). Aquí solo se regeneran los collages de combos.
 
-New-ComboPack (Join-Path $productsDir "combo5.png") (887875, 26243, 26300, 21394, 68339) "COMBO PACK 5" '$ 165.000'
+New-ComboPack (Join-Path $productsDir "combo5.png") (887875, 26243, 26300, 760112, 103239) "COMBO PACK 5" '$ 165.000'
 New-ComboPack (Join-Path $productsDir "combo10.png") (887875, 21394, 26300, 760111, 760112, 103239, 760113, 2057, 26243, 760114) "COMBO PACK 10" '$ 300.000'
 
 Write-Host "Listo."

@@ -10,12 +10,12 @@ const PRODUCTS = [
 
   // ---- Los 10 perfumes del stock (precio minorista fijo $40.000) ----
   { id: 887875, brand: "ARMAF", name: "Club de Nuit EDP 100ml", gender: "M", retailARS: 40000, img: "img/products/887875.png" },
-  { id: 21394, brand: "LATTAFA", name: "Fakhar Pride Gold Extract EDP 100ml", gender: "U", retailARS: 40000, img: "img/products/21394.png" },
+  { id: 21394, brand: "LATTAFA", name: "Fakhar Pride Gold Extract EDP 100ml", gender: "U", retailARS: 40000, img: "img/products/21394.jpg" },
   { id: 26300, brand: "LATTAFA", name: "Asad EDP 100ml", gender: "M", retailARS: 40000, img: "img/products/26300.png" },
   { id: 760111, brand: "LATTAFA", name: "Asad Bourbon EDP 100ml", gender: "M", retailARS: 40000, img: "img/products/760111.png" },
   { id: 760112, brand: "ASDAAF", name: "Ameerat Al Sharq Parfum 100ml", gender: "F", retailARS: 40000, img: "img/products/760112.png" },
   { id: 103239, brand: "ARMAF", name: "Odyssey Mandarin Sky EDP 100ml", gender: "M", retailARS: 40000, img: "img/products/103239.png" },
-  { id: 760113, brand: "ASDAAF", name: "Ameerat Al Arab EDP 100ml", gender: "F", retailARS: 40000, img: "img/products/760113.png" },
+  { id: 760113, brand: "ASDAAF", name: "Ameerat Al Arab EDP 100ml", gender: "F", retailARS: 40000, img: "img/products/760113.jpg" },
   { id: 2057, brand: "AL WATANIAH", name: "Sabah Al Ward EDP 100ml", gender: "F", retailARS: 40000, img: "img/products/2057.png" },
   { id: 26243, brand: "LATTAFA", name: "Yara EDP 100ml", gender: "F", retailARS: 40000, img: "img/products/26243.png" },
   { id: 760114, brand: "LATTAFA", name: "Yara Elixir EDP 100ml", gender: "F", retailARS: 40000, img: "img/products/760114.png" }
