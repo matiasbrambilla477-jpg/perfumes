@@ -1,0 +1,4 @@
+# Datos internos de costos (no publicar)
+/b2b/*.csv
+*.csv
+__pycache__/
