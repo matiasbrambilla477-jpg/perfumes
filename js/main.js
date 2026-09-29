@@ -155,6 +155,8 @@
 
   function renderGrid() {
     const items = getVisibleProducts();
+    const comboBanner = document.getElementById("comboBanner");
+    if (comboBanner) comboBanner.classList.toggle("hidden", activeFilter !== "todos" && activeFilter !== "C");
     if (!items.length) {
       grid.innerHTML = '<p style="text-align:center;color:var(--gray)">No hay productos que coincidan con tu búsqueda.</p>';
       return;
