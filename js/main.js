@@ -121,6 +121,7 @@
         <div class="card-body">
           <p class="card-brand">${isCombo ? "PACK MAYORISTA" : p.brand}</p>
           <h3 class="card-name">${p.name}</h3>
+          ${p.pitch ? `<p class="card-pitch">${p.pitch}</p>` : ""}
           <div class="card-meta">
             <p class="card-tag">${isCombo ? "Surtido" : GENDER_LABEL[p.gender]}</p>
             ${isCombo ? `<p class="card-size">${p.units} perfumes</p>` : (size ? `<p class="card-size">${size}</p>` : "")}

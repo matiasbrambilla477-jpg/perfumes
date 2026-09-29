@@ -316,6 +316,7 @@ button { font-family: inherit; cursor: pointer; }
 .card-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 6px; min-height: 2.8em; }
 .card-name a:hover { color: var(--gold-dark); }
 .card-tag { font-size: 0.72rem; color: var(--gold-dark); margin-bottom: 12px; font-weight: 600; }
+.card-pitch { font-size: 0.78rem; line-height: 1.45; color: var(--gray); margin-bottom: 12px; }
 .card-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
 .card-meta .card-tag { margin-bottom: 0; }
 .card-size {

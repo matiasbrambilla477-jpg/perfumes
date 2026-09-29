@@ -128,20 +128,6 @@
   // ---- Los 10 perfumes (en el orden del stock) ----
   var STOCK = PRODUCTS.filter(function (p) { return p.type !== "combo"; });
 
-  // ---- Perfil olfativo / argumento de venta por SKU ----
-  var PITCH = {
-    887875: "Potente, cítrico y ahumado. El rey indiscutido de los cumplidos.",
-    21394: "Lujoso, especiado y dulce. Una bomba de elegancia.",
-    26300: "Masculino, especiado con vainilla y tabaco. Oscuro y seductor.",
-    760111: "Cálido, amaderado con un toque licoroso y envolvente.",
-    760112: "Oriental, ámbar y vainilla profunda. Exótico y duradero.",
-    103239: "Fresco, dulce y frutal con un fondo almizclado moderno.",
-    760113: "Floral frutal ultra femenino, chispeante y adictivo.",
-    2057: "Floral blanco elegante, limpio, luminoso y sofisticado.",
-    26243: "El viral mundial. Dulce, avainillado cremoso estilo postre.",
-    760114: "La evolución más intensa, ambarina y seductora de la línea Yara."
-  };
-
   // ---- Combos mayoristas ----
   function renderCombos() {
     var combos = PRODUCTS.filter(function (p) { return p.type === "combo"; });
@@ -181,7 +167,7 @@
         '<td class="num">' + (i + 1) + "</td>" +
         "<td>" + p.id + "</td>" +
         '<td class="brand"><b>' + p.brand + "</b></td>" +
-        "<td>" + p.name + '<div class="cc-pitch">' + (PITCH[p.id] || "") + "</div></td>" +
+        "<td>" + p.name + '<div class="cc-pitch">' + (p.pitch || "") + "</div></td>" +
         '<td class="num retail">' + fmtARS(p.retailARS) + "</td>" +
         "</tr>";
     }).join("");
