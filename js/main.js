@@ -99,11 +99,12 @@
   function cardHTML(p, i = 0) {
     const isCombo = p.type === "combo";
     const gLab = GENDER_LABEL[p.gender] || "Perfume";
-    const waMsg = encodeURIComponent(`Hola Elegance, me interesa el ${p.name} (${gLab}) que está a ${fmtARS(priceOf(p))}.`);
+    const fullName = isCombo ? p.name : `${p.brand} ${p.name}`;
+    const waMsg = encodeURIComponent(`Hola Elegance, me interesa el ${fullName} (${gLab}) que está a ${fmtARS(priceOf(p))}.`);
     const hasNotes = p.notes && p.notes.top;
     const imgs = imgsOf(p);
     const size = sizeOf(p);
-    const shareMsg = encodeURIComponent(`Mirá este perfume en Elegance: ${p.name} (${gLab}) por ${fmtARS(priceOf(p))} ${location.href.split('#')[0]}`);
+    const shareMsg = encodeURIComponent(`Mirá este perfume en Elegance: ${fullName} (${gLab}) por ${fmtARS(priceOf(p))} ${location.href.split('#')[0]}`);
     const thumbs = imgs.length > 1
       ? `<div class="thumb-row">
           ${imgs.map((src, i) => `<button class="thumb ${i === 0 ? 'active' : ''}" data-thumb="${i}" aria-label="Foto ${i + 1}"><img src="${src}" alt="" loading="lazy"></button>`).join("")}
@@ -232,7 +233,7 @@
   function handleShare(id) {
     const p = PRODUCTS.find((x) => x.id === id);
     if (!p) return;
-    const text = `Míralo en Elegance: ${p.name} (${GENDER_LABEL[p.gender] || "Perfume"}) por ${fmtARS(priceOf(p))}`;
+    const text = `Míralo en Elegance: ${p.type === "combo" ? p.name : p.brand + " " + p.name} (${GENDER_LABEL[p.gender] || "Perfume"}) por ${fmtARS(priceOf(p))}`;
     const url = location.href.split("#")[0];
     if (navigator.share) {
       navigator.share({ title: "Elegance - Perfumes", text, url }).catch(() => {});
@@ -336,7 +337,7 @@
     if (!cart.length) return;
     const lines = cart.map((i) => {
       const p = PRODUCTS.find((x) => x.id === i.id);
-      return `- ${p.name} x${i.qty} = ${fmtARS(priceOf(p) * i.qty)}`;
+      return `- ${p.type === "combo" ? p.name : p.brand + " " + p.name} x${i.qty} = ${fmtARS(priceOf(p) * i.qty)}`;
     });
     const total = cart.reduce((a, i) => a + priceOf(PRODUCTS.find((x) => x.id === i.id) || {}) * i.qty, 0);
     const env = (typeof window.SHIP_LINE === "function" ? window.SHIP_LINE() : null);
