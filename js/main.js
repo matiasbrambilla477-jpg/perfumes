@@ -46,6 +46,15 @@
     }, { passive: true });
   }
 
+  // Botón flotante "volver al inicio": aparece al bajar y sube suave hasta arriba.
+  const toTop = document.getElementById("toTop");
+  if (toTop) {
+    const toggleToTop = () => toTop.classList.toggle("show", window.scrollY > 320);
+    window.addEventListener("scroll", toggleToTop, { passive: true });
+    toggleToTop();
+    toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  }
+
   // ---------- Lightbox ----------
   const lightbox = document.createElement("div");
   lightbox.className = "lightbox";
